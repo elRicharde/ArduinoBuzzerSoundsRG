@@ -235,6 +235,6 @@ void BuzzerSoundsRgBase::ok_sound() {
 /* ###############  BuzzerSoundsRgNonRtos ############### */
 // protected methods
 // Implementierung für Nicht-Rtos Umgebung -> Überschreiben der Abstrakten Pause Methode
-void BuzzerSoundsRgNonRtos::pause(int time_in_ms) {
-    delay(time_in_ms); // Standard Arduino delay
+void BuzzerSoundsRgNonRtos::pause(BuzzerSoundsRgBase::MorseCodeTiming pause) {
+    delay(static_cast<int>(pause)); // Standard Arduino delay
 }
