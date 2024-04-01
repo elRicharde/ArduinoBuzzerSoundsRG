@@ -46,14 +46,14 @@ class BuzzerSoundsRgBase {  // Class Declaration
 	protected:
 		// methods
 		virtual void pause(int time_in_ms) = 0; // Reine virtuelle Methode  
-		// this abstract method needs to be redefined depending on the usage with or without rtos:
+		// this abstract method needs to be redefined depending on the usage with or without Rtos:
 		//
 			// class BuzzerSoundsRgNonRtos : public BuzzerSoundsRgBase {
 			// public:
 			//     // derived class constructor calls base class constructor
 			//     BuzzerSoundsRgNonRtos(int buzzerPin) : BuzzerSoundsRgBase(buzzerPin) {}
 			//
-			//	   redefine abstract method into concrete implementation for use without rtos
+			//	   redefine abstract method into concrete implementation for use without Rtos
 			//     void pause(int time_in_ms) override {
 			//         delay(time_in_ms); // Standard Arduino delay
 			//     }
@@ -64,9 +64,9 @@ class BuzzerSoundsRgBase {  // Class Declaration
 			//     // derived class constructor calls base class constructor
 			//     BuzzerSoundsRgRtos(int buzzerPin) : BuzzerSoundsRgBase(buzzerPin) {}
 			//
-			//     redefine abstract method into concrete implementation for use with rtos
+			//     redefine abstract method into concrete implementation for use with Rtos
 			//     void pause(int time_in_ms) override {
-			//         vTaskDelay(pdMS_TO_TICKS(time_in_ms)); // RTOS delay
+			//         vTaskDelay(pdMS_TO_TICKS(time_in_ms)); // Rtos delay
 			//     }
 			// };
 
@@ -90,15 +90,15 @@ class BuzzerSoundsRgBase {  // Class Declaration
 };
 
 /* ###############  BuzzerSoundsRgRtos ############### */
-// sollte in spezifischen Programmen abgeleitet werden, um hier die Abhängigkeit von RTOS zu vermeiden
-// class BuzzerSoundsRgRTOS : public BuzzerSoundsRgBase {
+// sollte in spezifischen Programmen abgeleitet werden, um hier die Abhängigkeit von Rtos zu vermeiden
+// class BuzzerSoundsRgRtos : public BuzzerSoundsRgBase {
 // 	public:
 // 		// derived class constructor calls base class constructor
-// 		BuzzerSoundsRgRTOS(int buzzerPin) : BuzzerSoundsRgBase(buzzerPin) {}
+// 		BuzzerSoundsRgRtos(int buzzerPin) : BuzzerSoundsRgBase(buzzerPin) {}
 // 	
-// 		// redefine abstract method into concrete implementation for use with rtos
+// 		// redefine abstract method into concrete implementation for use with Rtos
 // 		void pause(int time_in_ms) override {
-// 			vTaskDelay(pdMS_TO_TICKS(time_in_ms)); // RTOS delay
+// 			vTaskDelay(pdMS_TO_TICKS(time_in_ms)); // Rtos delay
 // 		}
 // };
 
@@ -109,7 +109,7 @@ class BuzzerSoundsRgNonRtos : public BuzzerSoundsRgBase {
 		BuzzerSoundsRgNonRtos(int buzzerPin) : BuzzerSoundsRgBase(buzzerPin) {}
 
 	protected:
-		// redefine abstract method into concrete implementation for use without rtos
+		// redefine abstract method into concrete implementation for use without Rtos
 		void pause(int time_in_ms) override; // for Stadnard Arduino / c++ Delay
 };
 
