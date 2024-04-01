@@ -27,14 +27,15 @@ void BuzzerSoundsRgBase::playSound(SoundType sound) {
 		case SoundType::AuthOk:
 			auth_ok_sound();
 			break;
-
+		
+		// morsecode sounds
 		case SoundType::SOS:
 			sos_sound();
 			break;
 		case SoundType::SMS:
 			sms_sound();
 			break;
-		case SoundType::Ok:
+		case SoundType::OK:
 			ok_sound();
 			break;	
 		default:
