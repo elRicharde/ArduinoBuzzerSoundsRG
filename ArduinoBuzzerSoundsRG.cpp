@@ -40,6 +40,7 @@ void BuzzerSoundsRgBase::playSound(SoundType sound) {
 			break;	
 		default:
 			// nothing
+			break:
 	}
 }
 
