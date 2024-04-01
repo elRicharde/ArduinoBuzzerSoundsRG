@@ -45,7 +45,7 @@ class BuzzerSoundsRgBase {  // Class Declaration
 				
 	protected:
 		// methods
-		virtual void pause(int time_in_ms) = 0; // Reine virtuelle Methode  
+		virtual void pause(BuzzerSoundsRgBase::MorseCodeTiming pause) = 0; // Reine virtuelle Methode  
 		// this abstract method needs to be redefined depending on the usage with or without Rtos:
 		//
 			// class BuzzerSoundsRgNonRtos : public BuzzerSoundsRgBase {
@@ -110,7 +110,7 @@ class BuzzerSoundsRgNonRtos : public BuzzerSoundsRgBase {
 
 	protected:
 		// redefine abstract method into concrete implementation for use without Rtos
-		void pause(int time_in_ms) override; // for Stadnard Arduino / c++ Delay
+		void pause(BuzzerSoundsRgBase::MorseCodeTiming pause) override; // for Stadnard Arduino / c++ Delay
 };
 
 #endif // ARDUINO_BUZZER_SOUNDS_RG_H
