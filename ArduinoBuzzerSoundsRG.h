@@ -90,17 +90,17 @@ class BuzzerSoundsRgBase {  // Class Declaration
 };
 
 /* ###############  BuzzerSoundsRgRtos ############### */
-// sollte in spezifischen Programmen abgeleitet werden, um hier die Abhängigkeit von Rtos zu vermeiden
+// should be derived in specific programs to avoid dependency on Rtos HERE
 // class BuzzerSoundsRgRtos : public BuzzerSoundsRgBase {
-// 	public:
-// 		// derived class constructor calls base class constructor
-// 		BuzzerSoundsRgRtos(int buzzerPin) : BuzzerSoundsRgBase(buzzerPin) {}
-// 	
-// 		// redefine abstract method into concrete implementation for use with Rtos
-// 		void pause(int time_in_ms) override {
-// 			vTaskDelay(pdMS_TO_TICKS(time_in_ms)); // Rtos delay
-// 		}
-// };
+// 			public:
+// 			    // derived class constructor calls base class constructor
+// 			    BuzzerSoundsRgRtos(int buzzerPin) : BuzzerSoundsRgBase(buzzerPin) {}
+//
+// 			    // redefine abstract method into concrete implementation for use with rtos
+//           void pause(BuzzerSoundsRgBase::MorseCodeTiming pause) {
+//               vTaskDelay(pdMS_TO_TICKS(static_cast<int>(pause))); // Standard Arduino delay
+//           }
+// 			};
 
 /* ###############  BuzzerSoundsRgNonRtos ############### */
 class BuzzerSoundsRgNonRtos : public BuzzerSoundsRgBase {
