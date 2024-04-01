@@ -28,15 +28,15 @@ pause	KEYWORD2
 # ENUM VALUES (LITERAL1)
 ############################################
 
-DitLength    LITERAL1
-DitPause     LITERAL1
-DahLength    LITERAL1
-DahPause     LITERAL1
-WordPause    LITERAL1
+DitLength	LITERAL1
+DitPause	LITERAL1
+DahLength	LITERAL1
+DahPause	LITERAL1
+WordPause	LITERAL1
 
-DbReadError  LITERAL1
-NoAuth       LITERAL1
-AuthOk       LITERAL1
-SOS          LITERAL1
-SMS          LITERAL1
-OK           LITERAL1
+DbReadError	LITERAL1
+NoAuth	LITERAL1
+AuthOk	LITERAL1
+SOS	LITERAL1
+SMS	LITERAL1
+OK	LITERAL1
