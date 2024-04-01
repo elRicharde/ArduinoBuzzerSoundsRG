@@ -4,10 +4,7 @@
 #include <Arduino.h> // will not hurt, as it contains guards against multiple definition
 
 
-
-
 /* ###############  BuzzerSoundsRgBase ############### */
-
 class BuzzerSoundsRgBase {  // Class Declaration
 	public: 
 	
@@ -31,39 +28,22 @@ class BuzzerSoundsRgBase {  // Class Declaration
 		enum class SoundType {
 			DbReadError,
 			NoAuth,
-			AuthOk
+			AuthOk,
+			SOS,
+			SMS,
+			OK
 		};
 
 		// Constructor
-		BuzzerSoundsRgBase(int buzzerPin) {
-		  _buzzerPin = buzzerPin;
-		  pinMode(_buzzerPin, OUTPUT);    // Set Pin for Buzzer as output
-		}
+		explicit BuzzerSoundsRgBase(int buzzerPin);
 
 		// virtual destructor
-		virtual ~BuzzerSoundsRgBase() {
-			// Destructor-Logic to be placed here if needed
-		}
+		virtual ~BuzzerSoundsRgBase();
 
 		// method to play a sound based on enum type
-		void playSound(SoundType sound) {
-			switch (sound) {
-				case SoundType::DbReadError:
-					db_read_error_sound();
-					break;
-				case SoundType::NoAuth:
-					no_auth_sound();
-					break;
-				case SoundType::AuthOk:
-					auth_ok_sound();
-					break;
-			}
-		}
-		
-	private: 
-		// attributes
-		int _buzzerPin;
-		
+		void playSound(SoundType sound);
+				
+	protected:
 		// methods
 		virtual void pause(int time_in_ms) = 0; // Reine virtuelle Methode  
 		// this abstract method needs to be redefined depending on the usage with or without rtos:
@@ -79,10 +59,10 @@ class BuzzerSoundsRgBase {  // Class Declaration
 			//     }
 			// };
 			//
-			// class BuzzerSoundsRgRTOS : public BuzzerSoundsRgBase {
+			// class BuzzerSoundsRgRtos : public BuzzerSoundsRgBase {
 			// public:
 			//     // derived class constructor calls base class constructor
-			//     BuzzerSoundsRgRTOS(int buzzerPin) : BuzzerSoundsRgBase(buzzerPin) {}
+			//     BuzzerSoundsRgRtos(int buzzerPin) : BuzzerSoundsRgBase(buzzerPin) {}
 			//
 			//     redefine abstract method into concrete implementation for use with rtos
 			//     void pause(int time_in_ms) override {
@@ -91,75 +71,47 @@ class BuzzerSoundsRgBase {  // Class Declaration
 			// };
 
 
+	private: 
+		// attributes
+		int _buzzerPin;
 		
-		void db_read_error_sound() {
-		// 2x lang 1x länger
-		  digitalWrite(_buzzerPin, HIGH);
-		  pause(MorseCodeTiming::DitLength);
-		  digitalWrite(_buzzerPin, LOW); 
-		  pause(140);
-		  digitalWrite(_buzzerPin, HIGH);
-		  pause(700);
-		  digitalWrite(_buzzerPin, LOW); 
-		  pause(140);
-		  digitalWrite(_buzzerPin, HIGH);
-		  pause(1400);
-		  digitalWrite(_buzzerPin, LOW);  
-		}
+		// methods
+		void db_read_error_sound();
 
+		void no_auth_sound();
+		
+		void auth_ok_sound();
+		
+		void sos_sound();
+		
+		void sms_sound();
+		
+		void ok_sound();
+};
 
-		void no_auth_sound() {
-		// 5 kurz 1 lang
-		  digitalWrite(_buzzerPin, HIGH);
-		  pause(70);
-		  digitalWrite(_buzzerPin, LOW); 
-		  pause(70);
-		  digitalWrite(_buzzerPin, HIGH);
-		  pause(70);
-		  digitalWrite(_buzzerPin, LOW); 
-		  pause(70);
-		  digitalWrite(_buzzerPin, HIGH);
-		  pause(70);
-		  digitalWrite(_buzzerPin, LOW); 
-		  pause(70);
-		  digitalWrite(_buzzerPin, HIGH);
-		  pause(70);
-		  digitalWrite(_buzzerPin, LOW); 
-		  pause(70);
-		  digitalWrite(_buzzerPin, HIGH);
-		  pause(70);
-		  digitalWrite(_buzzerPin, LOW); 
-		  pause(70);
-		  digitalWrite(_buzzerPin, HIGH);
-		  pause(400);
-		  digitalWrite(_buzzerPin, LOW);   
-		}
+/* ###############  BuzzerSoundsRgRtos ############### */
+// sollte in spezifischen Programmen abgeleitet werden, um hier die Abhängigkeit von RTOS zu vermeiden
+// class BuzzerSoundsRgRTOS : public BuzzerSoundsRgBase {
+// 	public:
+// 		// derived class constructor calls base class constructor
+// 		BuzzerSoundsRgRTOS(int buzzerPin) : BuzzerSoundsRgBase(buzzerPin) {}
+// 	
+// 		// redefine abstract method into concrete implementation for use with rtos
+// 		void pause(int time_in_ms) override {
+// 			vTaskDelay(pdMS_TO_TICKS(time_in_ms)); // RTOS delay
+// 		}
+// };
 
-
-		void auth_ok_sound() {
-		// 1 kurz 1 lang    
-		  digitalWrite(_buzzerPin, HIGH);
-		  pause(100);
-		  digitalWrite(_buzzerPin, LOW); 
-		  pause(100);
-		  digitalWrite(_buzzerPin, HIGH);
-		  pause(100);
-		  digitalWrite(_buzzerPin, LOW); 
-		}
-
-}
-
-
-	class BuzzerSoundsRTOS : public BuzzerSoundsBase {
+/* ###############  BuzzerSoundsRgNonRtos ############### */
+class BuzzerSoundsRgNonRtos : public BuzzerSoundsRgBase {
 	public:
-	// Abgeleitete Klasse Konstruktor ruft Basisklasse Konstruktor auf
-	BuzzerSoundsRTOS(int buzzerPin) : BuzzerSoundsBase(buzzerPin) {}
+		// derived class constructor calls base class constructor
+		BuzzerSoundsRgNonRtos(int buzzerPin) : BuzzerSoundsRgBase(buzzerPin) {}
 
-	// Redefiniton der Pause-Methode
-	void pause(int time_in_ms) override {
-		vTaskDelay(pdMS_TO_TICKS(time_in_ms)); // RTOS delay
-	}
-	};
+	protected:
+		// redefine abstract method into concrete implementation for use without rtos
+		void pause(int time_in_ms) override; // for Stadnard Arduino / c++ Delay
+		}
+};
+
 #endif // ARDUINO_BUZZER_SOUNDS_RG_H
-
-
