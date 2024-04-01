@@ -111,7 +111,6 @@ class BuzzerSoundsRgNonRtos : public BuzzerSoundsRgBase {
 	protected:
 		// redefine abstract method into concrete implementation for use without rtos
 		void pause(int time_in_ms) override; // for Stadnard Arduino / c++ Delay
-		}
 };
 
 #endif // ARDUINO_BUZZER_SOUNDS_RG_H
