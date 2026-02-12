@@ -37,7 +37,9 @@ void BuzzerSoundsRgBase::playSound(SoundType sound) {
 	}
 }
 
-// private methods
+// Morse code building blocks — each produces a single beep without trailing pause.
+// Pauses between elements (DitPause) and between letters (DahPause) are added
+// explicitly in the sound methods to ensure correct Morse code timing.
 void BuzzerSoundsRgBase::dit() {
 	digitalWrite(_buzzerPin, HIGH);
 	pause(MorseCodeTiming::DitLength);
@@ -51,14 +53,17 @@ void BuzzerSoundsRgBase::dah() {
 }
 
 void BuzzerSoundsRgBase::db_read_error_sound() {
-	// U = dit-dit-dah
+	// Morse "U" (..-) — two short beeps followed by a long one.
+	// Suitable for data/read errors: noticeable but not alarming.
 	dit(); pause(MorseCodeTiming::DitPause);
 	dit(); pause(MorseCodeTiming::DitPause);
 	dah();
 }
 
 void BuzzerSoundsRgBase::no_auth_sound() {
-	// Custom pattern: 5x dit + dah
+	// Custom pattern (.....-) — five rapid short beeps + one long tone.
+	// Not a standard Morse character. The insistent rapid beeping
+	// followed by a long tone clearly signals "access denied".
 	dit(); pause(MorseCodeTiming::DitPause);
 	dit(); pause(MorseCodeTiming::DitPause);
 	dit(); pause(MorseCodeTiming::DitPause);
@@ -68,46 +73,58 @@ void BuzzerSoundsRgBase::no_auth_sound() {
 }
 
 void BuzzerSoundsRgBase::auth_ok_sound() {
-	// A = dit-dah
+	// Morse "A" (.-) — one short + one long beep.
+	// Quick and pleasant confirmation: "authentication successful".
 	dit(); pause(MorseCodeTiming::DitPause);
 	dah();
 }
 
 void BuzzerSoundsRgBase::sos_sound() {
-	// S = dit-dit-dit, O = dah-dah-dah, S = dit-dit-dit
+	// Morse "SOS" (...---...) — the universal distress signal.
+	// Use for critical system errors or emergencies that require immediate attention.
+	// S (...)
 	dit(); pause(MorseCodeTiming::DitPause);
 	dit(); pause(MorseCodeTiming::DitPause);
 	dit();
 	pause(MorseCodeTiming::DahPause); // letter gap S -> O
+	// O (---)
 	dah(); pause(MorseCodeTiming::DitPause);
 	dah(); pause(MorseCodeTiming::DitPause);
 	dah();
 	pause(MorseCodeTiming::DahPause); // letter gap O -> S
+	// S (...)
 	dit(); pause(MorseCodeTiming::DitPause);
 	dit(); pause(MorseCodeTiming::DitPause);
 	dit();
 }
 
 void BuzzerSoundsRgBase::sms_sound() {
-	// S = dit-dit-dit, M = dah-dah, S = dit-dit-dit
+	// Morse "SMS" (...--...) — the classic SMS notification pattern.
+	// Use for incoming messages, notifications, or non-critical alerts.
+	// S (...)
 	dit(); pause(MorseCodeTiming::DitPause);
 	dit(); pause(MorseCodeTiming::DitPause);
 	dit();
 	pause(MorseCodeTiming::DahPause); // letter gap S -> M
+	// M (--)
 	dah(); pause(MorseCodeTiming::DitPause);
 	dah();
 	pause(MorseCodeTiming::DahPause); // letter gap M -> S
+	// S (...)
 	dit(); pause(MorseCodeTiming::DitPause);
 	dit(); pause(MorseCodeTiming::DitPause);
 	dit();
 }
 
 void BuzzerSoundsRgBase::ok_sound() {
-	// O = dah-dah-dah, K = dah-dit-dah
+	// Morse "OK" (-----.-) — acknowledgment/ready signal.
+	// Use for successful operations, boot-up confirmation, or "system ready".
+	// O (---)
 	dah(); pause(MorseCodeTiming::DitPause);
 	dah(); pause(MorseCodeTiming::DitPause);
 	dah();
 	pause(MorseCodeTiming::DahPause); // letter gap O -> K
+	// K (-.- )
 	dah(); pause(MorseCodeTiming::DitPause);
 	dit(); pause(MorseCodeTiming::DitPause);
 	dah();

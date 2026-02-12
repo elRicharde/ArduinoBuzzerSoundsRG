@@ -24,23 +24,24 @@ class BuzzerSoundsRgBase {  // Class Declaration
 			WordPause = 700      // break between words
 		};
 
-		// Definition of SoundTypes
+		// Preset sound patterns.
+		// Each sound uses Morse code elements (dit/dah) to create distinct, recognizable patterns.
 		enum class SoundType {
-			DbReadError,
-			NoAuth,
-			AuthOk,
-			SOS,
-			SMS,
-			OK
+			DbReadError,  // Morse "U" (..-) — short alert for data/read errors
+			NoAuth,       // Custom (.....-) — insistent rapid beeps + long tone for access denied
+			AuthOk,       // Morse "A" (.-) — short confirmation beep for successful authentication
+			SOS,          // Morse "SOS" (...---...) — universal distress signal for critical errors
+			SMS,          // Morse "SMS" (...--...) — classic notification pattern for incoming messages
+			OK            // Morse "OK" (-----.-) — acknowledgment pattern for successful operations
 		};
 
-		// Constructor
+		// Constructor — initializes the buzzer pin as OUTPUT
 		explicit BuzzerSoundsRgBase(int buzzerPin);
 
-		// virtual destructor
+		// Virtual destructor — ensures buzzer pin is set LOW on destruction
 		virtual ~BuzzerSoundsRgBase();
 
-		// method to play a sound based on enum type
+		// Plays a preset sound pattern selected by SoundType enum
 		void playSound(SoundType sound);
 
 	protected:
@@ -60,19 +61,19 @@ class BuzzerSoundsRgBase {  // Class Declaration
 		//   };
 
 	private:
-		// attributes
-		int _buzzerPin;
+		int _buzzerPin;  // Digital output pin connected to the buzzer
 
-		// methods
-		void dit();
-		void dah();
+		// Morse code building blocks
+		void dit();  // Short beep (1 time unit)
+		void dah();  // Long beep (3 time units)
 
-		void db_read_error_sound();
-		void no_auth_sound();
-		void auth_ok_sound();
-		void sos_sound();
-		void sms_sound();
-		void ok_sound();
+		// Preset sound implementations
+		void db_read_error_sound();  // ..-   (Morse U)
+		void no_auth_sound();        // .....-(Custom)
+		void auth_ok_sound();        // .-    (Morse A)
+		void sos_sound();            // ...---... (Morse SOS)
+		void sms_sound();            // ...--...  (Morse SMS)
+		void ok_sound();             // -----.-   (Morse OK)
 };
 
 /* ###############  BuzzerSoundsRgRtos ############### */
