@@ -1,21 +1,19 @@
-#include <ArduinoBuzzerSoundsRG.h>
+#include "ArduinoBuzzerSoundsRG.h"
 
 /* ###############  BuzzerSoundsRgBase ############### */
 
 // Constructor
-BuzzerSoundsRgBase::BuzzerSoundsRgBase(int buzzerPin) {
-  _buzzerPin = buzzerPin;
-  pinMode(_buzzerPin, OUTPUT);    // Set Pin for Buzzer as output
+BuzzerSoundsRgBase::BuzzerSoundsRgBase(int buzzerPin) : _buzzerPin(buzzerPin) {
+	pinMode(_buzzerPin, OUTPUT);    // Set Pin for Buzzer as output
 }
 
-// destructor
+// Destructor
 BuzzerSoundsRgBase::~BuzzerSoundsRgBase() {
-	// Destructor-Logic to be placed here if needed
+	digitalWrite(_buzzerPin, LOW);
 }
 
 
 // public methods
-// method to play a sound based on enum type
 void BuzzerSoundsRgBase::playSound(SoundType sound) {
 	switch (sound) {
 		case SoundType::DbReadError:
@@ -27,8 +25,6 @@ void BuzzerSoundsRgBase::playSound(SoundType sound) {
 		case SoundType::AuthOk:
 			auth_ok_sound();
 			break;
-		
-		// morsecode sounds
 		case SoundType::SOS:
 			sos_sound();
 			break;
@@ -37,204 +33,87 @@ void BuzzerSoundsRgBase::playSound(SoundType sound) {
 			break;
 		case SoundType::OK:
 			ok_sound();
-			break;	
-		default:
-			// nothing
 			break;
 	}
 }
 
-// privat methods
-void BuzzerSoundsRgBase::db_read_error_sound() {
-	// DiDitDah
+// private methods
+void BuzzerSoundsRgBase::dit() {
 	digitalWrite(_buzzerPin, HIGH);
 	pause(MorseCodeTiming::DitLength);
-	digitalWrite(_buzzerPin, LOW); 
-	pause(MorseCodeTiming::DitLength);
-	
-	digitalWrite(_buzzerPin, HIGH);
-	pause(MorseCodeTiming::DitLength);
-	digitalWrite(_buzzerPin, LOW); 
-	pause(MorseCodeTiming::DitLength);
-	
+	digitalWrite(_buzzerPin, LOW);
+}
+
+void BuzzerSoundsRgBase::dah() {
 	digitalWrite(_buzzerPin, HIGH);
 	pause(MorseCodeTiming::DahLength);
 	digitalWrite(_buzzerPin, LOW);
 }
 
+void BuzzerSoundsRgBase::db_read_error_sound() {
+	// U = dit-dit-dah
+	dit(); pause(MorseCodeTiming::DitPause);
+	dit(); pause(MorseCodeTiming::DitPause);
+	dah();
+}
 
 void BuzzerSoundsRgBase::no_auth_sound() {
-	// DiDiDiDiDitDah
-	digitalWrite(_buzzerPin, HIGH);
-	pause(MorseCodeTiming::DitLength);
-	digitalWrite(_buzzerPin, LOW); 
-	pause(MorseCodeTiming::DitLength);
-	
-	digitalWrite(_buzzerPin, HIGH);
-	pause(MorseCodeTiming::DitLength);
-	digitalWrite(_buzzerPin, LOW); 
-	pause(MorseCodeTiming::DitLength);
-	
-	digitalWrite(_buzzerPin, HIGH);
-	pause(MorseCodeTiming::DitLength);
-	digitalWrite(_buzzerPin, LOW); 
-	pause(MorseCodeTiming::DitLength);
-	
-	digitalWrite(_buzzerPin, HIGH);
-	pause(MorseCodeTiming::DitLength);
-	digitalWrite(_buzzerPin, LOW); 
-	pause(MorseCodeTiming::DitLength);
-	
-	digitalWrite(_buzzerPin, HIGH);
-	pause(MorseCodeTiming::DitLength);
-	digitalWrite(_buzzerPin, LOW); 
-	pause(MorseCodeTiming::DitLength);
-	
-	digitalWrite(_buzzerPin, HIGH);
-	pause(MorseCodeTiming::DahLength);
-	digitalWrite(_buzzerPin, LOW);
+	// Custom pattern: 5x dit + dah
+	dit(); pause(MorseCodeTiming::DitPause);
+	dit(); pause(MorseCodeTiming::DitPause);
+	dit(); pause(MorseCodeTiming::DitPause);
+	dit(); pause(MorseCodeTiming::DitPause);
+	dit(); pause(MorseCodeTiming::DitPause);
+	dah();
 }
 
-
 void BuzzerSoundsRgBase::auth_ok_sound() {
-	// ditdah
-	digitalWrite(_buzzerPin, HIGH);
-	pause(MorseCodeTiming::DitLength);
-	digitalWrite(_buzzerPin, LOW); 
-	pause(MorseCodeTiming::DitLength);
-	
-	digitalWrite(_buzzerPin, HIGH);
-	pause(MorseCodeTiming::DahLength);
-	digitalWrite(_buzzerPin, LOW);
+	// A = dit-dah
+	dit(); pause(MorseCodeTiming::DitPause);
+	dah();
 }
 
 void BuzzerSoundsRgBase::sos_sound() {
-	// didididahdahdahdididit
-	digitalWrite(_buzzerPin, HIGH);
-	pause(MorseCodeTiming::DitLength);
-	digitalWrite(_buzzerPin, LOW); 
-	pause(MorseCodeTiming::DitLength);
-	
-	digitalWrite(_buzzerPin, HIGH);
-	pause(MorseCodeTiming::DitLength);
-	digitalWrite(_buzzerPin, LOW); 
-	pause(MorseCodeTiming::DitLength);
-
-	digitalWrite(_buzzerPin, HIGH);
-	pause(MorseCodeTiming::DitLength);
-	digitalWrite(_buzzerPin, LOW); 
-	pause(MorseCodeTiming::DitLength);	
-	
-	digitalWrite(_buzzerPin, HIGH);
-	pause(MorseCodeTiming::DahLength);
-	digitalWrite(_buzzerPin, LOW);
-	pause(MorseCodeTiming::DitLength);	
-	
-	digitalWrite(_buzzerPin, HIGH);
-	pause(MorseCodeTiming::DahLength);
-	digitalWrite(_buzzerPin, LOW);
-	pause(MorseCodeTiming::DitLength);	
-
-	digitalWrite(_buzzerPin, HIGH);
-	pause(MorseCodeTiming::DahLength);
-	digitalWrite(_buzzerPin, LOW);
-	pause(MorseCodeTiming::DitLength);		
-	
-	digitalWrite(_buzzerPin, HIGH);
-	pause(MorseCodeTiming::DitLength);
-	digitalWrite(_buzzerPin, LOW); 
-	pause(MorseCodeTiming::DitLength);
-	
-	digitalWrite(_buzzerPin, HIGH);
-	pause(MorseCodeTiming::DitLength);
-	digitalWrite(_buzzerPin, LOW); 
-	pause(MorseCodeTiming::DitLength);
-
-	digitalWrite(_buzzerPin, HIGH);
-	pause(MorseCodeTiming::DitLength);
-	digitalWrite(_buzzerPin, LOW); 	
+	// S = dit-dit-dit, O = dah-dah-dah, S = dit-dit-dit
+	dit(); pause(MorseCodeTiming::DitPause);
+	dit(); pause(MorseCodeTiming::DitPause);
+	dit();
+	pause(MorseCodeTiming::DahPause); // letter gap S -> O
+	dah(); pause(MorseCodeTiming::DitPause);
+	dah(); pause(MorseCodeTiming::DitPause);
+	dah();
+	pause(MorseCodeTiming::DahPause); // letter gap O -> S
+	dit(); pause(MorseCodeTiming::DitPause);
+	dit(); pause(MorseCodeTiming::DitPause);
+	dit();
 }
 
 void BuzzerSoundsRgBase::sms_sound() {
-	// dididit dahdah dididit
-	digitalWrite(_buzzerPin, HIGH);
-	pause(MorseCodeTiming::DitLength);
-	digitalWrite(_buzzerPin, LOW); 
-	pause(MorseCodeTiming::DitLength);
-	
-	digitalWrite(_buzzerPin, HIGH);
-	pause(MorseCodeTiming::DitLength);
-	digitalWrite(_buzzerPin, LOW); 
-	pause(MorseCodeTiming::DitLength);
-
-	digitalWrite(_buzzerPin, HIGH);
-	pause(MorseCodeTiming::DitLength);
-	digitalWrite(_buzzerPin, LOW); 
-	pause(MorseCodeTiming::DahLength);	
-	
-	
-	digitalWrite(_buzzerPin, HIGH);
-	pause(MorseCodeTiming::DahLength);
-	digitalWrite(_buzzerPin, LOW);
-	pause(MorseCodeTiming::DitLength);	
-	
-	digitalWrite(_buzzerPin, HIGH);
-	pause(MorseCodeTiming::DahLength);
-	digitalWrite(_buzzerPin, LOW);
-	pause(MorseCodeTiming::DahLength);	
-
-
-	digitalWrite(_buzzerPin, HIGH);
-	pause(MorseCodeTiming::DitLength);
-	digitalWrite(_buzzerPin, LOW); 
-	pause(MorseCodeTiming::DitLength);
-	
-	digitalWrite(_buzzerPin, HIGH);
-	pause(MorseCodeTiming::DitLength);
-	digitalWrite(_buzzerPin, LOW); 
-	pause(MorseCodeTiming::DitLength);
-
-	digitalWrite(_buzzerPin, HIGH);
-	pause(MorseCodeTiming::DitLength);
-	digitalWrite(_buzzerPin, LOW); 
+	// S = dit-dit-dit, M = dah-dah, S = dit-dit-dit
+	dit(); pause(MorseCodeTiming::DitPause);
+	dit(); pause(MorseCodeTiming::DitPause);
+	dit();
+	pause(MorseCodeTiming::DahPause); // letter gap S -> M
+	dah(); pause(MorseCodeTiming::DitPause);
+	dah();
+	pause(MorseCodeTiming::DahPause); // letter gap M -> S
+	dit(); pause(MorseCodeTiming::DitPause);
+	dit(); pause(MorseCodeTiming::DitPause);
+	dit();
 }
 
 void BuzzerSoundsRgBase::ok_sound() {
-	// dahdahdah dahditdah
-	digitalWrite(_buzzerPin, HIGH);
-	pause(MorseCodeTiming::DahLength);
-	digitalWrite(_buzzerPin, LOW); 
-	pause(MorseCodeTiming::DitLength);
-	
-	digitalWrite(_buzzerPin, HIGH);
-	pause(MorseCodeTiming::DahLength);
-	digitalWrite(_buzzerPin, LOW); 
-	pause(MorseCodeTiming::DitLength);
-
-	digitalWrite(_buzzerPin, HIGH);
-	pause(MorseCodeTiming::DahLength);
-	digitalWrite(_buzzerPin, LOW); 
-	pause(MorseCodeTiming::DahLength);
-	
-	
-	digitalWrite(_buzzerPin, HIGH);
-	pause(MorseCodeTiming::DahLength);
-	digitalWrite(_buzzerPin, LOW); 
-	pause(MorseCodeTiming::DitLength);	
-	
-	digitalWrite(_buzzerPin, HIGH);
-	pause(MorseCodeTiming::DitLength);
-	digitalWrite(_buzzerPin, LOW); 
-	pause(MorseCodeTiming::DitLength);
-
-	digitalWrite(_buzzerPin, HIGH);
-	pause(MorseCodeTiming::DahLength);
-	digitalWrite(_buzzerPin, LOW); 
+	// O = dah-dah-dah, K = dah-dit-dah
+	dah(); pause(MorseCodeTiming::DitPause);
+	dah(); pause(MorseCodeTiming::DitPause);
+	dah();
+	pause(MorseCodeTiming::DahPause); // letter gap O -> K
+	dah(); pause(MorseCodeTiming::DitPause);
+	dit(); pause(MorseCodeTiming::DitPause);
+	dah();
 }
 
 /* ###############  BuzzerSoundsRgNonRtos ############### */
-// protected methods
-// Implementierung für Nicht-Rtos Umgebung -> Überschreiben der Abstrakten Pause Methode
 void BuzzerSoundsRgNonRtos::pause(BuzzerSoundsRgBase::MorseCodeTiming pause) {
-    delay(static_cast<int>(pause)); // Standard Arduino delay
+	delay(static_cast<int>(pause)); // Standard Arduino delay
 }

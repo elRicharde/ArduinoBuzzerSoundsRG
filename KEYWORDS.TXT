@@ -1,5 +1,5 @@
 ############################################
-# Syntax Coloring Map For ArduinoSoundsRG.h
+# Syntax Coloring Map For ArduinoBuzzerSoundsRG.h
 ############################################
 
 ############################################
@@ -8,7 +8,7 @@
 
 BuzzerSoundsRgBase	KEYWORD1
 BuzzerSoundsRgNonRtos	KEYWORD1
-BuzzerSoundsRgRTOS	KEYWORD1
+BuzzerSoundsRgRtos	KEYWORD1
 
 ############################################
 # ENUM TYPES (KEYWORD2)

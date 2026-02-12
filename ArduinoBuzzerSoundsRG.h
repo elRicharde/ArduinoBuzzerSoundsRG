@@ -6,8 +6,8 @@
 
 /* ###############  BuzzerSoundsRgBase ############### */
 class BuzzerSoundsRgBase {  // Class Declaration
-	public: 
-	
+	public:
+
 		// Definition of Morse Code timings and sound-types
 		enum class MorseCodeTiming {
 			// International Morse code is composed of five elements:
@@ -15,8 +15,8 @@ class BuzzerSoundsRgBase {  // Class Declaration
 			//   long mark, dash or dah ( _ ): three time units long
 			//   inter-element gap between the dits and dahs within a character: one dot duration or one unit long
 			//   short gap (between letters): three time units long
-			//   medium gap (between words): seven time units long	
-			
+			//   medium gap (between words): seven time units long
+
 			DitLength = 100,     // short signal
 			DitPause = 100,      // break between signals/signs
 			DahLength = 300,     // long signal = Dah = 3xDit
@@ -42,75 +42,52 @@ class BuzzerSoundsRgBase {  // Class Declaration
 
 		// method to play a sound based on enum type
 		void playSound(SoundType sound);
-				
+
 	protected:
 		// methods
-		virtual void pause(BuzzerSoundsRgBase::MorseCodeTiming pause) = 0; // Reine virtuelle Methode  
-		// this abstract method needs to be redefined depending on the usage with or without Rtos:
+		virtual void pause(BuzzerSoundsRgBase::MorseCodeTiming pause) = 0; // Pure virtual method
+		// This abstract method needs to be redefined depending on the usage with or without RTOS:
 		//
-			// class BuzzerSoundsRgNonRtos : public BuzzerSoundsRgBase {
-			// public:
-			//     // derived class constructor calls base class constructor
-			//     BuzzerSoundsRgNonRtos(int buzzerPin) : BuzzerSoundsRgBase(buzzerPin) {}
-			//
-			//	   redefine abstract method into concrete implementation for use without Rtos
-			//     void pause(int time_in_ms) override {
-			//         delay(time_in_ms); // Standard Arduino delay
-			//     }
-			// };
-			//
-			// class BuzzerSoundsRgRtos : public BuzzerSoundsRgBase {
-			// public:
-			//     // derived class constructor calls base class constructor
-			//     BuzzerSoundsRgRtos(int buzzerPin) : BuzzerSoundsRgBase(buzzerPin) {}
-			//
-			//     redefine abstract method into concrete implementation for use with Rtos
-			//     void pause(int time_in_ms) override {
-			//         vTaskDelay(pdMS_TO_TICKS(time_in_ms)); // Rtos delay
-			//     }
-			// };
+		// For RTOS, derive in your specific program to avoid dependency on RTOS in the library:
+		//
+		//   class BuzzerSoundsRgRtos : public BuzzerSoundsRgBase {
+		//   public:
+		//       explicit BuzzerSoundsRgRtos(int buzzerPin) : BuzzerSoundsRgBase(buzzerPin) {}
+		//
+		//       void pause(BuzzerSoundsRgBase::MorseCodeTiming pause) override {
+		//           vTaskDelay(pdMS_TO_TICKS(static_cast<int>(pause))); // RTOS delay
+		//       }
+		//   };
 
-
-	private: 
+	private:
 		// attributes
 		int _buzzerPin;
-		
-		// methods
-		void db_read_error_sound();
 
+		// methods
+		void dit();
+		void dah();
+
+		void db_read_error_sound();
 		void no_auth_sound();
-		
 		void auth_ok_sound();
-		
 		void sos_sound();
-		
 		void sms_sound();
-		
 		void ok_sound();
 };
 
 /* ###############  BuzzerSoundsRgRtos ############### */
-// should be derived in specific programs to avoid dependency on Rtos HERE
-// class BuzzerSoundsRgRtos : public BuzzerSoundsRgBase {
-// 			public:
-// 			    // derived class constructor calls base class constructor
-// 			    BuzzerSoundsRgRtos(int buzzerPin) : BuzzerSoundsRgBase(buzzerPin) {}
-//
-// 			    // redefine abstract method into concrete implementation for use with rtos
-//           void pause(BuzzerSoundsRgBase::MorseCodeTiming pause) {
-//               vTaskDelay(pdMS_TO_TICKS(static_cast<int>(pause))); // Standard Arduino delay
-//           }
-// 			};
+// Should be derived in specific programs to avoid dependency on RTOS in the library.
+// See comment in base class for an example implementation.
 
 /* ###############  BuzzerSoundsRgNonRtos ############### */
 class BuzzerSoundsRgNonRtos : public BuzzerSoundsRgBase {
 	public:
 		// derived class constructor calls base class constructor
-		BuzzerSoundsRgNonRtos(int buzzerPin) : BuzzerSoundsRgBase(buzzerPin) {}
+		explicit BuzzerSoundsRgNonRtos(int buzzerPin) : BuzzerSoundsRgBase(buzzerPin) {}
 
 	protected:
-		// redefine abstract method into concrete implementation for use without Rtos
-		void pause(BuzzerSoundsRgBase::MorseCodeTiming pause) override; // for Stadnard Arduino / c++ Delay
+		// redefine abstract method into concrete implementation for use without RTOS
+		void pause(BuzzerSoundsRgBase::MorseCodeTiming pause) override; // Standard Arduino delay
 };
 
 #endif // ARDUINO_BUZZER_SOUNDS_RG_H
